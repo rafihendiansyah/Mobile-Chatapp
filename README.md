@@ -1,97 +1,261 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# ChatApp
 
-# Getting Started
+A real-time chat application built with React Native and Firebase. This mobile application allows users to register, login, and send text messages and images in real-time with offline support.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## 📱 Features
 
-## Step 1: Start Metro
+- **User Authentication**
+  - User registration with email and password
+  - Secure login with email and password
+  - Persistent authentication state (auto-login)
+  - Logout functionality
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+- **Real-time Messaging**
+  - Send and receive text messages in real-time
+  - Real-time synchronization using Firebase Firestore
+  - Message history with timestamps
+  - User identification for each message
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- **Image Sharing**
+  - Upload and share images in chat
+  - Image picker integration
+  - Base64 image encoding for storage
 
-```sh
-# Using npm
+- **Offline Support**
+  - Local storage using AsyncStorage
+  - Chat history persists when offline
+  - Automatic sync when connection is restored
+
+- **User Interface**
+  - Clean and modern UI design
+  - Message bubbles with sender identification
+  - Responsive layout
+  - Loading states and error handling
+
+## 🛠️ Tech Stack
+
+- **Framework**: React Native 0.82.1
+- **Language**: TypeScript
+- **Navigation**: React Navigation 7.x
+- **Backend Services**:
+  - Firebase Authentication
+  - Cloud Firestore (Real-time database)
+- **Storage**:
+  - AsyncStorage (Local storage)
+  - React Native FS (File system operations)
+- **Image Handling**: React Native Image Picker
+- **State Management**: React Hooks
+
+## 📋 Prerequisites
+
+Before running this project, make sure you have the following installed:
+
+- **Node.js** >= 20.0.0
+- **npm** or **yarn**
+- **React Native CLI**
+- **Android Studio** (for Android development)
+  - Android SDK
+  - Android Emulator or physical device
+- **Xcode** (for iOS development, macOS only)
+- **Firebase Account** (for backend services)
+
+## 🚀 Installation
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/ChatApp.git
+cd ChatApp
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+or
+
+```bash
+yarn install
+```
+
+### 3. Firebase Configuration
+
+1. Create a Firebase project at [Firebase Console](https://console.firebase.google.com/)
+2. Enable **Authentication** with Email/Password provider
+3. Create a **Firestore Database** in test mode
+4. For Android: Download `google-services.json` and place it in `android/app/`
+5. Update Firebase configuration in `firebase.ts` with your Firebase config:
+
+```typescript
+const firebaseConfig = {
+  apiKey: 'YOUR_API_KEY',
+  authDomain: 'YOUR_AUTH_DOMAIN',
+  projectId: 'YOUR_PROJECT_ID',
+  storageBucket: 'YOUR_STORAGE_BUCKET',
+  messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+  appId: 'YOUR_APP_ID',
+};
+```
+
+### 4. iOS Setup (macOS only)
+
+```bash
+cd ios
+bundle install
+bundle exec pod install
+cd ..
+```
+
+## 🏃 Running the Application
+
+### Start Metro Bundler
+
+```bash
 npm start
+```
 
-# OR using Yarn
+or
+
+```bash
 yarn start
 ```
 
-## Step 2: Build and run your app
+### Run on Android
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+In a new terminal:
 
-### Android
-
-```sh
-# Using npm
+```bash
 npm run android
+```
 
-# OR using Yarn
+or
+
+```bash
 yarn android
 ```
 
-### iOS
+### Run on iOS (macOS only)
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+In a new terminal:
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
+```bash
 npm run ios
+```
 
-# OR using Yarn
+or
+
+```bash
 yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## 📁 Project Structure
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+```
+ChatApp/
+├── android/                 # Android native code
+├── ios/                     # iOS native code
+├── screens/                 # Screen components
+│   ├── LoginScreen.tsx     # Authentication screen
+│   └── ChatScreen.tsx       # Chat interface screen
+├── App.tsx                  # Main app component with navigation
+├── firebase.ts              # Firebase configuration and utilities
+├── storage.ts               # Local storage utilities
+├── package.json             # Dependencies and scripts
+├── tsconfig.json            # TypeScript configuration
+└── README.md                # Project documentation
+```
 
-## Step 3: Modify your app
+## 🔧 Configuration
 
-Now that you have successfully run the app, let's make changes!
+### Firebase Firestore Rules
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+Make sure your Firestore security rules allow read/write access:
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /messages/{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+```
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+### Environment Variables
 
-## Congratulations! :tada:
+For production, consider using environment variables for Firebase configuration. You can use libraries like `react-native-config` or `react-native-dotenv`.
 
-You've successfully run and modified your React Native App. :partying_face:
+## 📱 Usage
 
-### Now what?
+1. **Register/Login**
+   - Open the app
+   - Register a new account or login with existing credentials
+   - The app will automatically navigate to the chat screen upon successful authentication
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+2. **Send Messages**
+   - Type your message in the input field
+   - Tap the send button (→) to send
+   - Messages appear in real-time for all users
 
-# Troubleshooting
+3. **Share Images**
+   - Tap the "+" button to open image picker
+   - Select an image from your gallery
+   - The image will be uploaded and shared in the chat
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+4. **Logout**
+   - Tap the "Logout" button in the header
+   - You will be redirected to the login screen
 
-# Learn More
+## 🧪 Testing
 
-To learn more about React Native, take a look at the following resources:
+Run tests with:
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+```bash
+npm test
+```
+
+or
+
+```bash
+yarn test
+```
+
+## 🐛 Troubleshooting
+
+### Metro Bundler Issues
+
+If you encounter issues with Metro bundler, try clearing the cache:
+
+```bash
+npm start -- --reset-cache
+```
+
+### Android Build Issues
+
+- Make sure Android SDK is properly configured
+- Check that `ANDROID_HOME` environment variable is set
+- Clean and rebuild: `cd android && ./gradlew clean && cd ..`
+
+### iOS Build Issues
+
+- Make sure CocoaPods dependencies are installed: `cd ios && pod install && cd ..`
+- Clean build folder in Xcode: Product → Clean Build Folder
+
+### Firebase Connection Issues
+
+- Verify Firebase configuration in `firebase.ts`
+- Check Firebase console for service status
+- Ensure Firestore rules allow authenticated access
+
+## 📝 License
+
+This project is created for educational purposes as part of the Platform-Based Programming (PBP) course.
+
+## 🙏 Acknowledgments
+
+- React Native community
+- Firebase team
+- All open-source contributors whose libraries made this project possible
