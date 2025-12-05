@@ -2,26 +2,32 @@
 
 A real-time chat application built with React Native and Firebase. This mobile application allows users to register, login, and send text messages and images in real-time with offline support.
 
+This project is created for the Platform-Based Development (PBP) course assignment.
+
 ## 📱 Features
 
 - **User Authentication**
+
   - User registration with email and password
   - Secure login with email and password
   - Persistent authentication state (auto-login)
   - Logout functionality
 
 - **Real-time Messaging**
+
   - Send and receive text messages in real-time
   - Real-time synchronization using Firebase Firestore
   - Message history with timestamps
   - User identification for each message
 
 - **Image Sharing**
+
   - Upload and share images in chat
   - Image picker integration
   - Base64 image encoding for storage
 
 - **Offline Support**
+
   - Local storage using AsyncStorage
   - Chat history persists when offline
   - Automatic sync when connection is restored
@@ -191,16 +197,19 @@ For production, consider using environment variables for Firebase configuration.
 ## 📱 Usage
 
 1. **Register/Login**
+
    - Open the app
    - Register a new account or login with existing credentials
    - The app will automatically navigate to the chat screen upon successful authentication
 
 2. **Send Messages**
+
    - Type your message in the input field
    - Tap the send button (→) to send
    - Messages appear in real-time for all users
 
 3. **Share Images**
+
    - Tap the "+" button to open image picker
    - Select an image from your gallery
    - The image will be uploaded and shared in the chat
